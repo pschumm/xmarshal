@@ -101,6 +101,9 @@ class Schema:
                     else:
                         collected_attributes[parsed_key] =  self.marshal(value)
 
+            if 'cdata' in valid_fields:
+                collected_attributes['cdata'] = obj.cdata
+
             return scheme(**collected_attributes)
         
         else:
@@ -119,7 +122,9 @@ class Schema:
                     collected_attributes[pluralize(child)] = getattr(obj, child)
                 else:
                     collected_attributes[child] = getattr(obj, child)
-        
+
+            el._tag = obj._name
+            
             return el
 
     def parse(self, string):
