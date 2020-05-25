@@ -80,7 +80,7 @@ class Schema:
             scheme = self.namespace.get(tag)
         
             collected_attributes = {}
-            valid_fields = inspect.getargspec(scheme.__init__).args
+            valid_fields = set(inspect.getargspec(scheme.__init__).args[1:] + inspect.getargspec(scheme.__new__).args[1:])
 
             for attribute in obj._attributes:
                 if to_snake_case(attribute) in valid_fields:

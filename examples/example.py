@@ -32,19 +32,19 @@ class GlobalVariables:
         self.protocol_name = protocol_name
 
 @schema.define
-class StudyName:
-    def __init__(self, cdata):
-        self = cdata
+class StudyName(str):
+    def __new__(self, cdata):
+        return super().__new__(self, cdata)
 
 @schema.define
-class StudyDescription:
-    def __init__(self, cdata):
-        self = cdata
+class StudyDescription(str):
+    def __new__(self, cdata):
+        return super().__new__(self, cdata)
         
 @schema.define
-class ProtocolName:
-    def __init__(self, cdata):
-        self = cdata
+class ProtocolName(str):
+    def __new__(self, cdata):
+        return super().__new__(self, cdata)
 
 @schema.define
 class BasicDefinitions:
@@ -183,7 +183,7 @@ class ItemGroupRef:
         self.collection_exception_condition_oid = collection_exception_condition_oid
                  
 with open('example.xml') as f:
-    root = schema.parse(f.read())
+    odm = schema.parse(f.read())
 
 
 
