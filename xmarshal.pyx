@@ -1,10 +1,6 @@
 import re
-from typing import List
-from xml.etree import ElementTree
-from lxml import etree, objectify
 import untangle
 import inspect
-from collections import namedtuple
 from copy import deepcopy
 
 class XMarshalElement(object):
@@ -36,7 +32,10 @@ def create_element(tag, attributes):
 
     return element
 
-def to_snake_case(string):
+
+to_snake_case_pattern = re.compile('(.)([A-Z][a-z]+)')
+to_snake_case_pattern_2 = re.compile('([a-z0-9])([A-Z])')
+cdef to_snake_case(str string):
     """
     Converts a name from PascalCase/"NotCamelCase" to snake_case.
     Importantly, maintains that acronyms are lowercased, not separated
@@ -45,10 +44,10 @@ def to_snake_case(string):
     https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
     """
 
-    string = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', string).lower()
+    string2 = re.sub(to_snake_case_pattern, r'\1_\2', string)
+    return re.sub(to_snake_case_pattern_2, r'\1_\2', string2).lower()
 
-def pluralize(string):
+cdef pluralize(str string):
     if string.endswith('y'):
         return string[:-1] + 'ies'
     elif string.endswith('s'):
@@ -80,7 +79,7 @@ class Schema:
             scheme = self.namespace.get(tag)
         
             collected_attributes = {}
-            valid_fields = set(inspect.getargspec(scheme.__init__).args[1:] + inspect.getargspec(scheme.__new__).args[1:])
+            valid_fields = set(inspect.getfullargspec(scheme.__init__).args[1:] + inspect.getfullargspec(scheme.__new__).args[1:])
 
             for attribute in obj._attributes:
                 if to_snake_case(attribute) in valid_fields:
@@ -107,25 +106,7 @@ class Schema:
             return scheme(**collected_attributes)
         
         else:
-            if obj.cdata.strip() != '':
-                return obj.cdata.strip()
-        
-            el = XMarshalElement()
-
-            collected_attributes = {}
-
-            for attribute in obj._attributes:
-                collected_attributes[to_snake_case(attribute)] = self.marshal(obj._attributes[attribute])
-
-            for child in dir(obj):
-                if isinstance(child, list):
-                    collected_attributes[pluralize(child)] = getattr(obj, child)
-                else:
-                    collected_attributes[child] = getattr(obj, child)
-
-            el._tag = obj._name
-            
-            return el
+            return None
 
     def parse(self, string):
         root = untangle.parse(string).children[0]
