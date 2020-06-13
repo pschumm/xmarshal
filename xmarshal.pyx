@@ -58,10 +58,14 @@ cdef pluralize(str string):
 class Schema:
     def __init__(self):
         self.namespace = {}
-
+                
     def define(self, schema_class):
         self.namespace[schema_class.__name__] = schema_class
-        return schema_class
+
+    def define_tag(self, schema_classname):
+        def inner(schema_class):
+            self.namespace[schema_classname] = schema_class
+        return inner
 
     def marshal(self, obj):
         if isinstance(obj, str):

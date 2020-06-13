@@ -3,7 +3,7 @@ from xmarshal import Schema
 schema = Schema()
 
 # TODO: add attributes
-@schema.define
+@schema.define_tag
 class ODM:
     def __init__(self,
                  studies,
@@ -16,7 +16,7 @@ class ODM:
         self.clinical_datas = clinical_datas
         self.associations = associations
         self.ds_signatures = ds_signatures
-        
+
 @schema.define
 class Study:
     def __init__(self, oid, global_variables, meta_data_versions):
@@ -185,11 +185,4 @@ class ItemGroupRef:
 with open('example.xml') as f:
     odm = schema.parse(f.read())
 
-
-
-
-
-
-
-
-
+print(odm)
