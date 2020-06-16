@@ -90,6 +90,8 @@ class Schema:
                 if to_snake_case(attribute) in valid_fields:
                     collected_attributes[to_snake_case(attribute)] = self.marshal(obj._attributes[attribute])
 
+            # for some reason untangle returns duplicate attributes,
+            # that's why we're calling set
             for key in set(dir(obj)):
                 value = getattr(obj, key)
                 parsed_key = to_snake_case(key)
