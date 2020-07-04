@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Cython translations to C
+xmarshal.c
+
 # C extensions
 *.so
 
