@@ -67,7 +67,7 @@ class Schema:
             self.namespace[schema_classname] = schema_class
         return inner
 
-    def marshal(self, obj):
+    def marshal(self, obj, verbose=False):
         if isinstance(obj, str):
             return obj
 
@@ -78,6 +78,7 @@ class Schema:
             return None
 
         tag = obj._name
+        if verbose:
         print(tag)
         
         if tag in self.namespace:
@@ -115,6 +116,6 @@ class Schema:
         else:
             return None
 
-    def parse(self, string):
+    def parse(self, string, verbose=False):
         root = untangle.parse(string).children[0]
-        return self.marshal(root)
+        return self.marshal(root, verbose)
