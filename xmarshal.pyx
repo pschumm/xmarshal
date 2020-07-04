@@ -79,7 +79,7 @@ class Schema:
 
         tag = obj._name
         if verbose:
-        print(tag)
+            print(tag)
         
         if tag in self.namespace:
             scheme = self.namespace.get(tag)
