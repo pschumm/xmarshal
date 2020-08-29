@@ -33,7 +33,7 @@ def create_element(tag, attributes):
     return element
 
 
-to_snake_case_pattern = re.compile('(.)([A-Z][a-z]+)')
+to_snake_case_pattern = re.compile('(.):([A-Z][a-z]+)')
 to_snake_case_pattern_2 = re.compile('([a-z0-9])([A-Z])')
 cdef to_snake_case(str string):
     """
@@ -67,7 +67,7 @@ class Schema:
             self.namespace[schema_classname] = schema_class
         return inner
 
-    def marshal(self, obj):
+    def marshal(self, obj, verbose=False):
         if isinstance(obj, str):
             return obj
 
@@ -78,7 +78,8 @@ class Schema:
             return None
 
         tag = obj._name
-        print(tag)
+        if verbose:
+            print(tag)
         
         if tag in self.namespace:
             scheme = self.namespace.get(tag)
@@ -115,6 +116,6 @@ class Schema:
         else:
             return None
 
-    def parse(self, string):
+    def parse(self, string, verbose=False):
         root = untangle.parse(string).children[0]
-        return self.marshal(root)
+        return self.marshal(root, verbose)
