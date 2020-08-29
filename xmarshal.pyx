@@ -33,7 +33,7 @@ def create_element(tag, attributes):
     return element
 
 
-to_snake_case_pattern = re.compile('(.)([A-Z][a-z]+)')
+to_snake_case_pattern = re.compile('(.):([A-Z][a-z]+)')
 to_snake_case_pattern_2 = re.compile('([a-z0-9])([A-Z])')
 cdef to_snake_case(str string):
     """
